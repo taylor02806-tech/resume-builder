@@ -66,10 +66,11 @@ def generate():
     experience = data.get("experience", "").strip()
     projects = data.get("projects", "").strip()
     tone = data.get("tone", "전문적이고 신뢰감 있는")
+    mbti = data.get("mbti", "").strip().upper()
     prompt_type = data.get("prompt_type", "general")  # 'general' (Prompt A) 또는 'expert' (Prompt B)
 
     # 백엔드 로그: 수신된 요청 정보 기록
-    logger.info("AI 생성 요청 수신 - 이름: %s, 직무: %s, 모드: %s, 톤: %s", name, role, prompt_type, tone)
+    logger.info("AI 생성 요청 수신 - 이름: %s, 직무: %s, MBTI: %s, 모드: %s, 톤: %s", name, role, mbti or "미입력", prompt_type, tone)
 
     # 6-2. 백엔드 입력값 유효성 검증 (Validation)
     if not name:
@@ -104,6 +105,7 @@ def generate():
 - 이름: {name}
 - 지원 직무: {role}
 - 어조 및 스타일(Tone): {tone}
+- 성향 및 MBTI: {mbti if mbti else "미기재"}
 - 주요 경력 사항:
 {experience}
 - 수행 프로젝트:
@@ -119,7 +121,7 @@ def generate():
      * 프로젝트별 배경 및 목표
      * 본인의 구체적 기여도 및 사용 기술 스택
      * 기술적 난제 해결 과정(Problem Solving) 및 구체적 비즈니스/기술적 성과
-2. 어조: '{tone}' 분위기를 철저히 반영하되, 설득력 있고 전문적인 어휘를 사용하세요.
+2. 어조 및 성향: '{tone}' 분위기를 철저히 반영하되, 설득력 있고 전문적인 어휘를 사용하세요.{f" 또한 지원자의 MBTI({mbti}) 성향(업무 스타일, 문제 해결 및 협업 강점)을 프로필 요약과 역량 설명에 자연스럽게 녹여내세요." if mbti else ""}
 3. 출력 형식: 깔끔하게 서식화된 Markdown 문법(#, ##, -, **굵게** 등)을 사용하세요.
 """
     else:
@@ -135,6 +137,7 @@ def generate():
 - 이름: {name}
 - 지원 직무: {role}
 - 어조 및 스타일(Tone): {tone}
+- 성향 및 MBTI: {mbti if mbti else "미기재"}
 - 주요 경력 사항:
 {experience}
 - 수행 프로젝트:
@@ -150,7 +153,7 @@ def generate():
      * 주요 프로젝트 소개
      * 담당 역할 및 사용 기술
      * 배운 점 및 주요 성과
-2. 어조: '{tone}' 스타일에 맞추어 자연스럽고 매력적인 문장으로 작성하세요.
+2. 어조 및 성향: '{tone}' 스타일에 맞추어 자연스럽고 매력적인 문장으로 작성하세요.{f" 지원자의 MBTI({mbti}) 특성을 자기소개 및 역량 서술에 긍정적인 직무 강점으로 부각해 주세요." if mbti else ""}
 3. 출력 형식: 보기 편한 Markdown 문법(#, ##, -, **굵게** 등)을 적용하세요.
 """
 

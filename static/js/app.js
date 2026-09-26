@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const nameInput = document.getElementById("name");
     const roleInput = document.getElementById("role");
     const toneSelect = document.getElementById("tone");
+    const mbtiInput = document.getElementById("mbti");
     const experienceInput = document.getElementById("experience");
     const projectsInput = document.getElementById("projects");
     const submitBtn = document.getElementById("submitBtn");
@@ -53,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const name = nameInput.value.trim();
         const role = roleInput.value.trim();
         const tone = toneSelect.value;
+        const mbti = mbtiInput ? mbtiInput.value.trim().toUpperCase() : "";
         const experience = experienceInput.value.trim();
         const projects = projectsInput.value.trim();
 
@@ -100,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 name: name,
                 role: role,
                 tone: tone,
+                mbti: mbti,
                 prompt_type: promptType,
                 experience: experience,
                 projects: projects
