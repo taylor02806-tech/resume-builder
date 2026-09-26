@@ -1,6 +1,6 @@
 import os
 import logging
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from dotenv import load_dotenv
 from google import genai
 from google.genai import errors
@@ -16,8 +16,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# 3. Flask 웹 애플리케이션 초기화
-app = Flask(__name__)
+# 3. Flask 웹 애플리케이션 초기화 (Vercel Serverless 및 로컬 환경 모두 호환되도록 절대 경로 명시)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "templates"),
+    static_folder=os.path.join(BASE_DIR, "static")
+)
 
 # 4. Gemini API 클라이언트 초기화 함수
 def get_gemini_client():
@@ -33,6 +38,17 @@ def get_gemini_client():
 def index():
     logger.info("홈페이지(index.html) 접속 요청")
     return render_template("index.html")
+
+
+# 5-1. PWA Service Worker 및 Manifest 라우트
+@app.route("/sw.js")
+def service_worker():
+    return send_from_directory(app.static_folder, "sw.js", mimetype="application/javascript")
+
+
+@app.route("/manifest.json")
+def manifest():
+    return send_from_directory(app.static_folder, "manifest.json", mimetype="application/manifest+json")
 
 
 # 6. AI 이력서 & 포트폴리오 생성 API 라우트 (POST /generate)
